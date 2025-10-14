@@ -1,0 +1,30 @@
+Implement:
+Global arguments
+verbose
+dry-run
+help
+Commands:
+ - find
+    - name
+    - size
+    - ext
+    - date
+    - contains
+    -- hidden
+    -- output
+ - sort
+    - by (all fined options)
+        - asc
+        - dec
+    -- move
+    -- copy
+    -- preview
+ - clean
+    -- build-artifacts
+    -- temp
+    -- logs
+    -- downloads-partials
+    -- zero-byte
+    -- empties
+    -- duplicates
+    -- vcs-ignored
