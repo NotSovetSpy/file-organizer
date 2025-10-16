@@ -137,12 +137,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "file-organizer"
+name = "fo"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
  "env_logger",
+ "log",
  "owo-colors",
 ]
 

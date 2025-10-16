@@ -1,10 +1,11 @@
 [package]
-name = "file-organizer"
+name = "fo"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 anyhow = { version = "1.0.100" }
-clap = { version = "4.5.49", features = ["derive"] }
+clap = { version = "4.5.49", features = ["derive", "suggestions", "help"] }
 owo-colors = { version = "4.2.3" }
 env_logger = { version = "0.11.8" }
+log = { version = "0.4.28" }
