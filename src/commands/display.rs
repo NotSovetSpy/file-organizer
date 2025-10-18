@@ -25,7 +25,12 @@ impl Display for Commands {
                     "filename".bright_cyan(),
                     file_name.as_ref().unwrap_or(&String::from("None"))
                 )?;
-                writeln!(f, "{}: {}", "directory".bright_cyan(), directory)?;
+                writeln!(
+                    f,
+                    "{}: {}",
+                    "directory".bright_cyan(),
+                    directory.to_string_lossy()
+                )?;
                 writeln!(
                     f,
                     "{}: {}",

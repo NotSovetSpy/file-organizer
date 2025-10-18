@@ -1,14 +1,18 @@
+use std::path::PathBuf;
+
 use clap::Subcommand;
 
-use crate::{cli::Cli, commands::find::FindArguments};
+use self::arguments::FindArguments;
+use crate::cli::Cli;
 
+pub mod arguments;
 mod display;
 mod find;
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     Find {
-        directory: String,
+        directory: PathBuf,
         // TODO: Implement
         #[arg(short = 'n', long, name = "name")]
         file_name: Option<String>,
@@ -24,13 +28,13 @@ pub enum Commands {
         // TODO: Consider change value type
         #[arg(short, long)]
         date: Option<String>,
-        // TODO: Implement
         #[arg(short = 'a', long = "all")]
         search_hidden: bool,
         // TODO: Implement
         // TODO: Consider change value type
         #[arg(short, long, default_value_t = String::from("console"))]
         output: String,
+        // TODO: Implement
         #[arg(long = "regex")]
         is_regex: bool,
         #[arg(short = 'r', long = "recursive", default_value_t = true)]
