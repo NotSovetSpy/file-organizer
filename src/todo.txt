@@ -9,7 +9,6 @@ Commands:
     - size
     - ext
     - date
-    - contains
     -- hidden
     -- output
  - sort

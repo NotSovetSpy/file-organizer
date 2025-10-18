@@ -5,11 +5,15 @@ mod logger;
 use clap::Parser;
 use cli::Cli;
 use log::trace;
+use owo_colors::OwoColorize;
 
 fn main() {
     match run() {
         Ok(()) => (),
-        Err(help_message) => println!("{help_message}"),
+        Err(err) => println!(
+            "{}.\n {err}",
+            "An error occurred during running application".bright_red()
+        ),
     };
 }
 
