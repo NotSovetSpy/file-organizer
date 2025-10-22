@@ -5,6 +5,7 @@ use crate::{cli::Cli, commands::find::FindCommand};
 use anyhow::bail;
 pub use extractors::*;
 use filters::*;
+use log::trace;
 use std::fs::DirEntry;
 use time::PrimitiveDateTime;
 
@@ -69,6 +70,7 @@ pub fn create_matcher_from_config(
     config: &FindCommand,
     context: &Cli,
 ) -> anyhow::Result<Box<dyn FileMatcherTrait>> {
+    trace!("Creating file matcher from config");
     if let Some(file_name) = &config.file_name {
         if !config.is_regex {
             let matcher = FileMatcher::with_exact_match(file_name.clone(), FileNameExtractor);

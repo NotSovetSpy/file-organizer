@@ -1,5 +1,5 @@
 use clap::Parser;
-use log::trace;
+use log::{debug, trace};
 use owo_colors::OwoColorize;
 use std::fmt::Display;
 use time::format_description;
@@ -47,7 +47,7 @@ impl Cli {
     pub fn execute_command(&self) -> anyhow::Result<()> {
         match &self.command {
             None => {
-                trace!("No command provided to execute");
+                debug!("No command provided to execute");
                 Ok(())
             }
             Some(command) => {

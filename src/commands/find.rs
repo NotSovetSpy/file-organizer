@@ -1,6 +1,7 @@
 use std::{fmt::Display, path::PathBuf};
 
 use clap::Parser;
+use log::{debug, trace};
 use owo_colors::OwoColorize;
 
 use self::file_list::FilesList;
@@ -62,14 +63,20 @@ pub struct FindCommand {
 
 impl FindCommand {
     pub fn execute(&self, context: &Cli) -> anyhow::Result<()> {
+        debug!("Executing 'find' command");
+        trace!("with configuration: {self}");
         let files = FilesList::new(&self.directory, self.search_recursive, self.search_hidden)?;
 
         let file_matcher = create_matcher_from_config(self, context)?;
         let mut matched_files = Vec::new();
+        let mut _total_files = 0;
+        let mut _total_matched_files = 0;
         for file in files {
             let file = file?;
+            _total_files += 1;
             if file_matcher.matches(&file, context)? {
                 matched_files.push(file);
+                _total_matched_files += 1;
             }
         }
 

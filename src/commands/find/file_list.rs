@@ -3,6 +3,8 @@ use std::{
     path::PathBuf,
 };
 
+use log::debug;
+
 /// Iterator over files in directory with extra specific iterating rules
 pub struct FilesList {
     is_recursive: bool,
@@ -17,6 +19,8 @@ impl FilesList {
         is_recursive: bool,
         search_hidden: bool,
     ) -> anyhow::Result<Self> {
+        debug!("Scanning directory: {}", start_directory.to_string_lossy());
+
         let root_dir = read_dir(start_directory)?;
 
         Ok(FilesList {
