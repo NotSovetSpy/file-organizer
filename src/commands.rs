@@ -1,73 +1,33 @@
-use std::path::PathBuf;
+use std::fmt::Display;
 
 use clap::Subcommand;
+use owo_colors::OwoColorize;
 
-use self::arguments::FindArguments;
-use crate::cli::Cli;
+use crate::{cli::Cli, commands::find::FindCommand};
 
-pub mod arguments;
-mod display;
 mod find;
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    Find {
-        directory: PathBuf,
-        // TODO: Implement
-        #[arg(short = 'n', long, name = "name")]
-        file_name: Option<String>,
-        // TODO: Implement
-        // TODO: Consider change value type
-        #[arg(short, long)]
-        size: Option<String>,
-        // TODO: Implement
-        // TODO: Consider change value type
-        #[arg(short, long)]
-        ext: Option<String>,
-        // TODO: Implement
-        // TODO: Consider change value type
-        #[arg(short, long)]
-        date: Option<String>,
-        #[arg(short = 'a', long = "all")]
-        search_hidden: bool,
-        // TODO: Implement
-        // TODO: Consider change value type
-        #[arg(short, long, default_value_t = String::from("console"))]
-        output: String,
-        // TODO: Implement
-        #[arg(long = "regex")]
-        is_regex: bool,
-        #[arg(short = 'r', long = "recursive", default_value_t = true)]
-        is_recursive: bool,
-    },
+    #[command(name = "find", about = "Find files with specific criteria")]
+    Find(FindCommand),
 }
 
 impl Commands {
     pub fn execute(&self, context: &Cli) -> anyhow::Result<()> {
         match self {
-            Commands::Find {
-                directory,
-                file_name,
-                size,
-                ext,
-                date,
-                search_hidden,
-                output,
-                is_regex,
-                is_recursive,
-            } => {
-                let args = FindArguments::new(
-                    directory,
-                    file_name.as_ref(),
-                    size.as_ref(),
-                    ext.as_ref(),
-                    date.as_ref(),
-                    *search_hidden,
-                    output,
-                    *is_regex,
-                    *is_recursive,
-                );
-                find::execute(args, context)
+            Commands::Find(cmd) => cmd.execute(context),
+        }
+    }
+}
+
+impl Display for Commands {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Commands::Find(cmd) => {
+                writeln!(f, "{}: {}", "command_name".bright_cyan(), "find")?;
+                writeln!(f, "{}", cmd)?;
+                Ok(())
             }
         }
     }

@@ -1,11 +1,14 @@
 mod cli;
 mod commands;
 mod logger;
+#[cfg(test)]
+pub mod volumes;
 
 use clap::Parser;
 use cli::Cli;
 use log::trace;
 use owo_colors::OwoColorize;
+use time::format_description;
 
 fn main() {
     match run() {
@@ -18,7 +21,8 @@ fn main() {
 }
 
 fn run() -> anyhow::Result<()> {
-    let cli = Cli::try_parse().map_err(|err| anyhow::anyhow!(err))?;
+    let mut cli = Cli::try_parse()?;
+    cli.datetime_format = format_description::parse("[day]-[month]-[year] [hour]:[minute]")?;
 
     logger::init(&cli);
 

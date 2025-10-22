@@ -4,14 +4,14 @@ use std::{
 };
 
 /// Iterator over files in directory with extra specific iterating rules
-pub struct FileList {
+pub struct FilesList {
     is_recursive: bool,
     search_hidden: bool,
     // Represent directory stack from start directory, that dynamically add dirs by DFS algorithm
     dir_stack: Vec<ReadDir>,
 }
 
-impl FileList {
+impl FilesList {
     pub fn new(
         start_directory: &PathBuf,
         is_recursive: bool,
@@ -19,7 +19,7 @@ impl FileList {
     ) -> anyhow::Result<Self> {
         let root_dir = read_dir(start_directory)?;
 
-        Ok(FileList {
+        Ok(FilesList {
             is_recursive,
             search_hidden,
             dir_stack: Vec::from([root_dir]),
@@ -27,7 +27,7 @@ impl FileList {
     }
 }
 
-impl Iterator for FileList {
+impl Iterator for FilesList {
     type Item = anyhow::Result<DirEntry>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -77,22 +77,17 @@ impl Iterator for FileList {
 
 #[cfg(test)]
 mod tests {
-    use std::{collections::HashSet, path::PathBuf};
+    use std::collections::HashSet;
 
-    use crate::commands::find::file_list::FileList;
-
-    fn get_test_path() -> PathBuf {
-        let project_dir = env!("CARGO_MANIFEST_DIR");
-        PathBuf::from(project_dir).join("tests/file_list")
-    }
+    use crate::{commands::find::file_list::FilesList, volumes::get_path_under_tests};
 
     #[test]
     fn test_iterate_file_list_without_recursion() {
-        let file_list = FileList::new(&get_test_path(), false, false).unwrap();
+        let file_list = FilesList::new(&get_path_under_tests("file_list"), false, false).unwrap();
 
         let mut result = HashSet::new();
         for file in file_list {
-            result.insert(file.unwrap().file_name().to_string_lossy().to_string());
+            result.insert(file.unwrap().file_name().to_string_lossy().into_owned());
         }
 
         let expected = HashSet::from(["a".to_string(), "d".to_string(), "i".to_string()]);
@@ -102,11 +97,11 @@ mod tests {
 
     #[test]
     fn test_iterate_file_list_with_recursion() {
-        let file_list = FileList::new(&get_test_path(), true, false).unwrap();
+        let file_list = FilesList::new(&get_path_under_tests("file_list"), true, false).unwrap();
 
         let mut result = HashSet::new();
         for file in file_list {
-            result.insert(file.unwrap().file_name().to_string_lossy().to_string());
+            result.insert(file.unwrap().file_name().to_string_lossy().into_owned());
         }
 
         let expected = HashSet::from([
@@ -126,11 +121,11 @@ mod tests {
 
     #[test]
     fn test_iterate_file_list_without_hidden() {
-        let file_list = FileList::new(&get_test_path(), true, false).unwrap();
+        let file_list = FilesList::new(&get_path_under_tests("file_list"), true, false).unwrap();
 
         let mut result = HashSet::new();
         for file in file_list {
-            result.insert(file.unwrap().file_name().to_string_lossy().to_string());
+            result.insert(file.unwrap().file_name().to_string_lossy().into_owned());
         }
 
         let expected = HashSet::from([
@@ -150,11 +145,11 @@ mod tests {
 
     #[test]
     fn test_iterate_file_list_with_hidden() {
-        let file_list = FileList::new(&get_test_path(), true, true).unwrap();
+        let file_list = FilesList::new(&get_path_under_tests("file_list"), true, true).unwrap();
 
         let mut result = HashSet::new();
         for file in file_list {
-            result.insert(file.unwrap().file_name().to_string_lossy().to_string());
+            result.insert(file.unwrap().file_name().to_string_lossy().into_owned());
         }
 
         let expected = HashSet::from([

@@ -16,3 +16,16 @@ pub fn init(cli: &Cli) {
 
     logger.init();
 }
+
+#[cfg(test)]
+pub mod tests {
+    use log::LevelFilter;
+
+    #[allow(dead_code)]
+    pub fn init_test_logger() {
+        let _ = env_logger::builder()
+            .is_test(true)
+            .filter_level(LevelFilter::Trace)
+            .try_init();
+    }
+}
