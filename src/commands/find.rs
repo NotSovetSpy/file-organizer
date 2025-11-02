@@ -5,10 +5,14 @@ use log::{debug, trace};
 use owo_colors::OwoColorize;
 
 use self::file_list::FilesList;
-use crate::{cli::Cli, commands::find::filtering::create_matcher_from_config};
+use crate::{
+    cli::Cli,
+    commands::find::{filtering::create_matcher_from_config, printer::print_files},
+};
 
 mod file_list;
 mod filtering;
+mod printer;
 
 #[derive(Parser, Debug, Default)]
 pub struct FindCommand {
@@ -67,21 +71,21 @@ impl FindCommand {
         trace!("with configuration: {self}");
         let files = FilesList::new(&self.directory, self.search_recursive, self.search_hidden)?;
 
+        debug!("Filtering files based on provided criteria");
         let file_matcher = create_matcher_from_config(self, context)?;
         let mut matched_files = Vec::new();
-        let mut _total_files = 0;
-        let mut _total_matched_files = 0;
+        let mut total_files = 0;
+        let mut total_matched_files = 0;
         for file in files {
             let file = file?;
-            _total_files += 1;
+            total_files += 1;
             if file_matcher.matches(&file, context)? {
                 matched_files.push(file);
-                _total_matched_files += 1;
+                total_matched_files += 1;
             }
         }
 
-        // TODO: Print results
-        Ok(())
+        print_files(context, &matched_files, total_files, total_matched_files)
     }
 }
 
