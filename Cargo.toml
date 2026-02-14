@@ -4,10 +4,13 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-anyhow = { version = "1.0.100" }
-clap = { version = "4.5.50", features = ["derive", "suggestions", "help"] }
+anyhow = { version = "1.0.101" }
+clap = { version = "4.5.58", features = ["derive", "suggestions", "help"] }
 owo-colors = { version = "4.2.3" }
-env_logger = { version = "0.11.8" }
-log = { version = "0.4.28" }
-regex = { version = "1.12.2" }
-time = { version = "0.3.4", features = ["formatting", "parsing"] }
+env_logger = { version = "0.11.9" }
+log = { version = "0.4.29" }
+regex = { version = "1.12.3" }
+time = { version = "0.3.47", features = ["formatting", "parsing"] }
+
+[dev-dependencies]
+test-case = { version = "3.3.1" }

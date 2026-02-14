@@ -1,5 +1,6 @@
 use crate::commands::sort::SortCommand;
 
+#[derive(Clone, Debug, Copy)]
 pub enum FileAction {
     Move,
     Copy,

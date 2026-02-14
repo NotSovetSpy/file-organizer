@@ -12,7 +12,10 @@ Commands:
     -- hidden
     -- output
  - sort
-    - by (all find options)
+    -- by
+      - size
+      - date
+      - ext
     -- move
     -- copy (default)
  - clean

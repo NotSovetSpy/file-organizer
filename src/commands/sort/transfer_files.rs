@@ -2,7 +2,7 @@ use std::{fs::DirEntry, path::PathBuf};
 
 use crate::commands::sort::file_action::FileAction;
 
-pub fn transfer_files(
+pub fn _transfer_files(
     _sorted_files_list: Vec<DirEntry>,
     _inner_directories_paths: Vec<PathBuf>,
     _current_directory_path: &PathBuf,

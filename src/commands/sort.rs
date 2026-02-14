@@ -3,19 +3,23 @@ use std::{
     path::PathBuf,
 };
 
-use clap::{Parser, ValueEnum};
+use clap::Parser;
 use log::{debug, trace};
 
 use crate::{cli::Cli, commands::sort::file_action::FileAction};
 use owo_colors::OwoColorize;
 use sort_directory::sort_directory;
-use transfer_files::transfer_files;
+// use transfer_files::transfer_files;
 
 mod file_action;
+mod sort_by;
 mod sort_directory;
+mod sorters;
 mod transfer_files;
 
 pub(super) use super::find::FilesList;
+pub(super) use sort_by::SortBy;
+pub(super) use sorters::*;
 
 #[derive(Parser, Debug, Default)]
 #[group(required = true, id = "filter", id = "action")]
@@ -40,7 +44,7 @@ pub struct SortCommand {
     #[arg(
         short,
         long,
-        help = "Sort values by name, size(in gb), extension(ext) or creation_date(date)"
+        help = "Sort values by size, extension(ext) or creation_date(date)"
     )]
     sort_by: SortBy,
     #[arg(
@@ -57,15 +61,6 @@ pub struct SortCommand {
     search_recursive: bool,
 }
 
-#[derive(Clone, Debug, Default, ValueEnum)]
-pub enum SortBy {
-    Name,
-    Size,
-    Ext,
-    #[default]
-    Date,
-}
-
 // Directory iterator
 //  -- Sort files in directory
 //  -- Return inner directories paths
@@ -80,24 +75,24 @@ impl SortCommand {
         debug!("Executing 'SORT' command");
         trace!("with configuration: {self}");
 
-        let file_action = FileAction::from(self);
+        let _file_action = FileAction::from(self);
         let mut paths = vec![self.directory.clone()];
         while let Some(path) = paths.pop() {
             let files_list = FilesList::new(&path, false, self.search_hidden)?;
 
             debug!("Sorting directory: {path:?}");
-            let (sorted_files_list, inner_directories_paths) =
-                sort_directory(files_list, &self.sort_by)?;
+            let (_sorted_files_list, _inner_directories_paths) =
+                sort_directory(files_list, self.sort_by)?;
 
-            debug!("Files sorted, transferring files");
-            let new_inner_directories_paths = transfer_files(
-                sorted_files_list,
-                inner_directories_paths,
-                &path,
-                &file_action,
-            )?;
+            // debug!("Files sorted, transferring files");
+            // let new_inner_directories_paths = transfer_files(
+            //     sorted_files_list,
+            //     inner_directories_paths,
+            //     &path,
+            //     &file_action,
+            // )?;
 
-            paths.extend(new_inner_directories_paths);
+            // paths.extend(new_inner_directories_paths);
         }
 
         Ok(())
