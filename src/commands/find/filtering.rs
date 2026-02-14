@@ -58,7 +58,7 @@ where
     E: Extractor<String>,
 {
     /// Create a FileMatcher with a regex filter (only for String extractors)
-    pub fn with_regex(regex_pattern: &String, extractor: E) -> anyhow::Result<Self> {
+    pub fn with_regex(regex_pattern: &str, extractor: E) -> anyhow::Result<Self> {
         Ok(Self {
             filter: Box::new(RegexFilter::new(regex_pattern)?),
             extractor,
@@ -263,11 +263,7 @@ mod tests {
 
     #[test]
     fn test_create_matcher_from_config_datetime_exact_match() {
-        use time::format_description;
-
-        let mut cli = Cli::default();
-        cli.datetime_format =
-            format_description::parse("[day]-[month]-[year] [hour]:[minute]").unwrap();
+        let cli = Cli::default();
 
         // Create a temporary file for testing datetime
         let temp_dir = std::env::temp_dir();
@@ -311,11 +307,7 @@ mod tests {
 
     #[test]
     fn test_create_matcher_from_config_datetime_regex_match() {
-        use time::format_description;
-
-        let mut cli = Cli::default();
-        cli.datetime_format =
-            format_description::parse("[day]-[month]-[year] [hour]:[minute]").unwrap();
+        let cli = Cli::default();
 
         // Create a temporary file for testing datetime
         let temp_dir = std::env::temp_dir();
@@ -362,10 +354,7 @@ mod tests {
 
     #[test]
     fn test_create_matcher_from_config_modified_exact_match() {
-        use time::format_description;
-        let mut cli = Cli::default();
-        cli.datetime_format =
-            format_description::parse("[day]-[month]-[year] [hour]:[minute]").unwrap();
+        let cli = Cli::default();
 
         // Create a temporary file for testing modified datetime
         let temp_dir = std::env::temp_dir();
@@ -411,11 +400,7 @@ mod tests {
 
     #[test]
     fn test_create_matcher_from_config_modified_regex_match() {
-        use time::format_description;
-
-        let mut cli = Cli::default();
-        cli.datetime_format =
-            format_description::parse("[day]-[month]-[year] [hour]:[minute]").unwrap();
+        let cli = Cli::default();
 
         // Create a temporary file for testing modified datetime
         let temp_dir = std::env::temp_dir();

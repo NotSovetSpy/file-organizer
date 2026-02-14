@@ -76,7 +76,7 @@ pub enum SortBy {
 //  -- Move/copy files
 //  -- Return inner directories paths with new locations
 impl SortCommand {
-    pub fn execute(&self, context: &Cli) -> anyhow::Result<()> {
+    pub fn execute(&self, _context: &Cli) -> anyhow::Result<()> {
         debug!("Executing 'SORT' command");
         trace!("with configuration: {self}");
 

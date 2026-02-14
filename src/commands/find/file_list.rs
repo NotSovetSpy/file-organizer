@@ -51,7 +51,7 @@ impl Iterator for FilesList {
 
                         // Skip hidden files if search_hidden flag not enabled
                         if !self.search_hidden
-                            && file.file_name().to_string_lossy().chars().next() == Some('.')
+                            && file.file_name().to_string_lossy().starts_with('.')
                         {
                             continue;
                         }

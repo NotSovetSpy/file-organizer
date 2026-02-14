@@ -28,8 +28,8 @@ pub struct RegexFilter {
 }
 
 impl RegexFilter {
-    pub fn new(regex_patter: &String) -> anyhow::Result<Self> {
-        let regex = Regex::new(regex_patter)?;
+    pub fn new(regex_pattern: &str) -> anyhow::Result<Self> {
+        let regex = Regex::new(regex_pattern)?;
         Ok(RegexFilter { regex })
     }
 }

@@ -32,7 +32,7 @@ impl Display for Commands {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Commands::Find(cmd) => {
-                writeln!(f, "{}: {}", "command_name".bright_cyan(), "find")?;
+                writeln!(f, "{}: find", "command_name".bright_cyan())?;
                 writeln!(f, "{}", cmd)?;
                 Ok(())
             }

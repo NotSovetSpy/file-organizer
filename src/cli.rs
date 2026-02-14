@@ -6,7 +6,7 @@ use time::format_description;
 
 use crate::commands::Commands;
 
-#[derive(Parser, Debug, Default)]
+#[derive(Parser, Debug)]
 #[command(version, about = "Simple CLI file organizer", next_line_help = true)]
 pub struct Cli {
     #[arg(short, long, global = true)]
@@ -36,10 +36,23 @@ impl Display for Cli {
                 Cli::format_commands(command)
             )?;
         } else {
-            writeln!(f, "{}: {}", "command".bright_cyan(), "None")?;
+            writeln!(f, "{}: None", "command".bright_cyan())?;
         }
 
         Ok(())
+    }
+}
+
+impl Default for Cli {
+    fn default() -> Self {
+        Cli {
+            verbose: false,
+            trace: false,
+            dry_run: false,
+            command: None,
+            datetime_format: format_description::parse("[day]-[month]-[year] [hour]:[minute]")
+                .expect("Should never fail since the format is hardcoded and correct"),
+        }
     }
 }
 
