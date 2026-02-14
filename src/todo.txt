@@ -12,12 +12,9 @@ Commands:
     -- hidden
     -- output
  - sort
-    - by (all fined options)
-        - asc
-        - dec
+    - by (all find options)
     -- move
-    -- copy
-    -- preview
+    -- copy (default)
  - clean
     -- build-artifacts
     -- temp

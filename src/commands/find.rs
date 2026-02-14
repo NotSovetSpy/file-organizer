@@ -4,15 +4,15 @@ use clap::Parser;
 use log::{debug, trace};
 use owo_colors::OwoColorize;
 
-use self::file_list::FilesList;
-use crate::{
-    cli::Cli,
-    commands::find::{filtering::create_matcher_from_config, printer::print_files},
-};
+use crate::cli::Cli;
 
 mod file_list;
 mod filtering;
 mod printer;
+
+pub(super) use file_list::FilesList;
+pub(super) use filtering::*;
+pub(super) use printer::*;
 
 #[derive(Parser, Debug, Default)]
 pub struct FindCommand {
@@ -61,8 +61,6 @@ pub struct FindCommand {
         help = "Search directories recursively"
     )]
     search_recursive: bool,
-    #[arg(short, long, default_value_t = String::from("console"))]
-    output: String,
 }
 
 impl FindCommand {
@@ -143,7 +141,6 @@ impl Display for FindCommand {
             "recursive".bright_cyan(),
             self.search_recursive
         )?;
-        writeln!(f, "{}: {}", "output".bright_cyan(), self.output)?;
 
         Ok(())
     }
