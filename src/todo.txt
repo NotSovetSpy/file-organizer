@@ -1,7 +1,6 @@
 Implement:
 Global arguments
 verbose
-dry-run
 help
 Commands:
  - find

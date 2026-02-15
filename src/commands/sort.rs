@@ -1,15 +1,16 @@
 use std::{
     fmt::{Debug, Display},
-    path::PathBuf,
+    fs,
+    path::{Path, PathBuf},
 };
 
 use clap::Parser;
 use log::{debug, trace};
 
-use crate::{cli::Cli, commands::sort::file_action::FileAction};
+use crate::cli::Cli;
 use owo_colors::OwoColorize;
 use sort_directory::sort_directory;
-// use transfer_files::transfer_files;
+use transfer_files::transfer_files;
 
 mod file_action;
 mod sort_by;
@@ -18,6 +19,7 @@ mod sorters;
 mod transfer_files;
 
 pub(super) use super::find::FilesList;
+pub(super) use file_action::FileAction;
 pub(super) use sort_by::SortBy;
 pub(super) use sorters::*;
 
@@ -75,26 +77,51 @@ impl SortCommand {
         debug!("Executing 'SORT' command");
         trace!("with configuration: {self}");
 
-        let _file_action = FileAction::from(self);
+        let mut file_action = FileAction::from(self);
         let mut paths = vec![self.directory.clone()];
+
+        self.create_target_root_directory(&self.directory)?;
+
         while let Some(path) = paths.pop() {
             let files_list = FilesList::new(&path, false, self.search_hidden)?;
+            let target_root_path = if path == self.directory {
+                &self.directory.join(format!(
+                    "../{}_sorted",
+                    self.directory
+                        .file_name()
+                        .unwrap_or_default()
+                        .to_string_lossy()
+                ))
+            } else {
+                &path
+            };
 
             debug!("Sorting directory: {path:?}");
-            let (_sorted_files_list, _inner_directories_paths) =
-                sort_directory(files_list, self.sort_by)?;
+            let sorted_files_list = sort_directory(files_list, self.sort_by)?;
 
-            // debug!("Files sorted, transferring files");
-            // let new_inner_directories_paths = transfer_files(
-            //     sorted_files_list,
-            //     inner_directories_paths,
-            //     &path,
-            //     &file_action,
-            // )?;
+            debug!("Transferring files from directory: {path:?}");
+            let inner_directories_paths =
+                transfer_files(sorted_files_list, target_root_path, &file_action)?;
 
-            // paths.extend(new_inner_directories_paths);
+            if self.search_recursive {
+                paths.extend(inner_directories_paths);
+                file_action = FileAction::Move;
+            }
         }
 
+        Ok(())
+    }
+
+    fn create_target_root_directory(&self, current_directory_path: &Path) -> anyhow::Result<()> {
+        let source_directory_name = current_directory_path
+            .file_name()
+            .unwrap_or_else(|| std::ffi::OsStr::new(""));
+        let target_root_path = current_directory_path.join(format!(
+            "../{}_sorted",
+            source_directory_name.to_string_lossy()
+        ));
+        trace!("Creating target root directory: {target_root_path:?}");
+        fs::create_dir(&target_root_path)?;
         Ok(())
     }
 }

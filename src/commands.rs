@@ -15,7 +15,10 @@ mod sort;
 pub enum Commands {
     #[command(name = "find", about = "Find files with specific criteria")]
     Find(FindCommand),
-    #[command(name = "sort", about = "Sort")]
+    #[command(
+        name = "sort",
+        about = "Sort files into directories based on specific criteria"
+    )]
     Sort(SortCommand),
 }
 
@@ -36,9 +39,10 @@ impl Display for Commands {
                 writeln!(f, "{}", cmd)?;
                 Ok(())
             }
-            Commands::Sort(_cmd) => {
-                // TODO: implemet
-                unimplemented!()
+            Commands::Sort(cmd) => {
+                writeln!(f, "{}: sort", "command_name".bright_cyan())?;
+                writeln!(f, "{}", cmd)?;
+                Ok(())
             }
         }
     }

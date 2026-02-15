@@ -13,8 +13,6 @@ pub struct Cli {
     pub verbose: bool,
     #[arg(long, global = true)]
     pub trace: bool,
-    #[arg(long, global = true)]
-    pub dry_run: bool,
     #[command(subcommand)]
     pub command: Option<Commands>,
     #[clap(skip)]
@@ -26,7 +24,6 @@ impl Display for Cli {
         writeln!(f, "{}", "Parsed arguments:".bold())?;
         writeln!(f, "{}: {}", "verbose".bright_cyan(), self.verbose)?;
         writeln!(f, "{}: {}", "trace".bright_cyan(), self.trace)?;
-        writeln!(f, "{}: {}", "dry-run".bright_cyan(), self.dry_run)?;
 
         if let Some(command) = &self.command {
             writeln!(
@@ -48,7 +45,6 @@ impl Default for Cli {
         Cli {
             verbose: false,
             trace: false,
-            dry_run: false,
             command: None,
             datetime_format: format_description::parse("[day]-[month]-[year] [hour]:[minute]")
                 .expect("Should never fail since the format is hardcoded and correct"),
