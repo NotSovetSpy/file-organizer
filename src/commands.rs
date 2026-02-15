@@ -5,9 +5,10 @@ use owo_colors::OwoColorize;
 
 use crate::{
     cli::Cli,
-    commands::{find::FindCommand, sort::SortCommand},
+    commands::{clean::CleanCommand, find::FindCommand, sort::SortCommand},
 };
 
+mod clean;
 mod find;
 mod sort;
 
@@ -20,6 +21,11 @@ pub enum Commands {
         about = "Sort files into directories based on specific criteria"
     )]
     Sort(SortCommand),
+    #[command(
+        name = "clean",
+        about = "Delete junk and temporary files from a directory"
+    )]
+    Clean(CleanCommand),
 }
 
 impl Commands {
@@ -27,6 +33,7 @@ impl Commands {
         match self {
             Commands::Find(cmd) => cmd.execute(context),
             Commands::Sort(cmd) => cmd.execute(context),
+            Commands::Clean(cmd) => cmd.execute(context),
         }
     }
 }
@@ -41,6 +48,11 @@ impl Display for Commands {
             }
             Commands::Sort(cmd) => {
                 writeln!(f, "{}: sort", "command_name".bright_cyan())?;
+                writeln!(f, "{}", cmd)?;
+                Ok(())
+            }
+            Commands::Clean(cmd) => {
+                writeln!(f, "{}: clean", "command_name".bright_cyan())?;
                 writeln!(f, "{}", cmd)?;
                 Ok(())
             }
