@@ -1,5 +1,6 @@
 mod cli;
 mod commands;
+mod confirmation;
 mod logger;
 #[cfg(test)]
 pub mod volumes;

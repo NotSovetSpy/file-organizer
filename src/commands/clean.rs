@@ -5,6 +5,7 @@ use log::{debug, info, trace, warn};
 use owo_colors::OwoColorize;
 
 use crate::cli::Cli;
+use crate::confirmation::confirm;
 
 pub(super) use super::find::FilesList;
 
@@ -79,6 +80,13 @@ impl CleanCommand {
     pub fn execute(&self, _context: &Cli) -> anyhow::Result<()> {
         debug!("Executing 'clean' command");
         trace!("with configuration: {self}");
+
+        if !confirm(
+            "This command will permanently delete junk files and directories. Make sure that you have closed all applications that might be using these files. Are you sure you want to proceed?",
+        ) {
+            debug!("User declined to delete files. Aborting command execution.");
+            return Ok(());
+        }
 
         let files = FilesList::new(&self.directory, self.search_recursive, self.search_hidden)?;
 

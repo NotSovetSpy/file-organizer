@@ -7,7 +7,7 @@ use std::{
 use clap::Parser;
 use log::{debug, trace};
 
-use crate::cli::Cli;
+use crate::{cli::Cli, confirmation::confirm};
 use owo_colors::OwoColorize;
 use sort_directory::sort_directory;
 use transfer_files::transfer_files;
@@ -76,6 +76,15 @@ impl SortCommand {
     pub fn execute(&self, _context: &Cli) -> anyhow::Result<()> {
         debug!("Executing 'SORT' command");
         trace!("with configuration: {self}");
+
+        if self.move_arg
+            && !confirm(
+                "You have chosen to move files. Are you sure you want to proceed? This action cannot be undone.",
+            )
+        {
+            debug!("User declined to move files. Aborting command execution.");
+            return Ok(());
+        }
 
         let mut file_action = FileAction::from(self);
         let mut paths = vec![self.directory.clone()];
