@@ -94,8 +94,8 @@ impl SortCommand {
         while let Some(path) = paths.pop() {
             let files_list = FilesList::new(&path, false, self.search_hidden)?;
             let target_root_path = if path == self.directory {
-                &self.directory.join(format!(
-                    "../{}_sorted",
+                &self.directory.join("..").join(format!(
+                    "{}_sorted",
                     self.directory
                         .file_name()
                         .unwrap_or_default()

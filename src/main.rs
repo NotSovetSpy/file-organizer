@@ -11,6 +11,9 @@ use log::trace;
 use owo_colors::OwoColorize;
 use time::format_description;
 
+#[cfg(all(test, not(target_os = "linux")))]
+compile_error!("This project's tests are Linux-only. Run `cargo test` on Linux.");
+
 fn main() {
     match run() {
         Ok(()) => (),
