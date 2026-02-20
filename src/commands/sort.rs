@@ -80,7 +80,7 @@ impl SortCommand {
         if self.move_arg
             && !confirm(
                 "You have chosen to move files. Are you sure you want to proceed? This action cannot be undone.",
-            )
+            )?
         {
             debug!("User declined to move files. Aborting command execution.");
             return Ok(());

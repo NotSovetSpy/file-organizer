@@ -83,7 +83,7 @@ impl CleanCommand {
 
         if !confirm(
             "This command will permanently delete junk files and directories. Make sure that you have closed all applications that might be using these files. Are you sure you want to proceed?",
-        ) {
+        )? {
             debug!("User declined to delete files. Aborting command execution.");
             return Ok(());
         }

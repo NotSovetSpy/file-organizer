@@ -1,16 +1,16 @@
 use std::io::{self, Write};
 
-pub fn confirm(prompt: &str) -> bool {
+pub fn confirm(prompt: &str) -> anyhow::Result<bool> {
     loop {
         print!("{prompt} [y/n]: ");
-        io::stdout().flush().unwrap();
+        io::stdout().flush()?;
 
         let mut s = String::new();
-        io::stdin().read_line(&mut s).unwrap();
+        io::stdin().read_line(&mut s)?;
 
         match s.trim().to_lowercase().as_str() {
-            "y" | "yes" => return true,
-            "n" | "no" => return false,
+            "y" | "yes" => return Ok(true),
+            "n" | "no" => return Ok(false),
             _ => {}
         }
     }
