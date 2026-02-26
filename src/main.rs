@@ -5,6 +5,7 @@ mod logger;
 #[cfg(test)]
 pub mod volumes;
 
+use anyhow::bail;
 use clap::Parser;
 use cli::Cli;
 use log::trace;
@@ -17,7 +18,7 @@ compile_error!("This project's tests are Linux-only. Run `cargo test` on Linux."
 fn main() {
     match run() {
         Ok(()) => (),
-        Err(err) => println!(
+        Err(err) => eprintln!(
             "{}.\n {err}",
             "An error occurred during running application".bright_red()
         ),
@@ -25,8 +26,9 @@ fn main() {
 }
 
 fn run() -> anyhow::Result<()> {
-    let mut cli = Cli::try_parse()?;
-    cli.datetime_format = format_description::parse("[day]-[month]-[year] [hour]:[minute]")?;
+    let mut cli = Cli::parse();
+    cli.datetime_format = format_description::parse("[day]-[month]-[year] [hour]:[minute]")
+        .expect("Should be valid, because its hardcoded.");
 
     logger::init(&cli);
 
@@ -35,7 +37,7 @@ fn run() -> anyhow::Result<()> {
 
     match cli.execute_command() {
         Ok(()) => trace!("Successfully executed command."),
-        Err(err) => eprintln!("An error occurred during running command: {err}"),
+        Err(err) => bail!("Failed to execute command:\n {err}"),
     }
 
     Ok(())

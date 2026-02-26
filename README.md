@@ -21,7 +21,7 @@ cargo build --release
 Add the following line to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
-export PATH="$PATH:<path-to-file-organizer>/target/release"
+export PATH="$PATH:<path-to-file-organizer>"
 ```
 
 Then reload the configuration:
@@ -33,7 +33,7 @@ source ~/.bashrc  # or ~/.zshrc
 Or use the absolute path dynamically:
 
 ```bash
-echo 'export PATH="$PATH:'$(pwd)'/target/release"' >> ~/.bashrc
+echo 'export PATH="$PATH:'$(pwd)'"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
