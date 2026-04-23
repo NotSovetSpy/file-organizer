@@ -1,5 +1,11 @@
 # Demonstration commands
 
+## Setup demonstration environment
+
+```sh
+./demo_setup.sh
+```
+
 ## ── SORT ──
 
 ```sh
